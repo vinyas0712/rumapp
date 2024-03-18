@@ -1183,7 +1183,6 @@ else {
     };
 }
 profiler.dispatchCustomEvent("GlimpseLoaded");
-
 <script language="javascript" type="text/javascript">
     function init() { window.RProfiler.addInfo('variation', 'token1'); }
     window.RProfiler ? init() : window.addEventListener("GlimpseLoaded", init);
