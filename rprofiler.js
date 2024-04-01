@@ -725,7 +725,11 @@ var AjaxRequestsHandler = (function () {
 var RProfiler = (function () {
     function RProfiler() {
         var _this = this;
+<<<<<<< HEAD
         this.restUrl = "portalstage.catchpoint.com/jp/91686/v3.3.11/M";
+=======
+        this.restUrl = "portalstage.catchpoint.com/jp/91649/v3.3.11/M";
+>>>>>>> e59ec4b5dfce33125190bc8b8974841f51720838
         this.startTime = (new Date()).getTime();
         this.eventsTimingHandler = new EventsTimingHandler();
         this.inputDelay = new InputDelayHandler();
@@ -1183,10 +1187,13 @@ else {
     };
 }
 profiler.dispatchCustomEvent("GlimpseLoaded");
+<<<<<<< HEAD
 <script language="javascript" type="text/javascript">
     function init() { window.RProfiler.addInfo('variation', 'token1'); }
     window.RProfiler ? init() : window.addEventListener("GlimpseLoaded", init);
 </script>
 
 
+=======
+>>>>>>> e59ec4b5dfce33125190bc8b8974841f51720838
 
