@@ -725,15 +725,11 @@ var AjaxRequestsHandler = (function () {
 var RProfiler = (function () {
     function RProfiler() {
         var _this = this;
-<<<<<<< HEAD
-        this.restUrl = "portalstage.catchpoint.com/jp/91686/v3.3.11/M";
-=======
-        this.restUrl = "portalstage.catchpoint.com/jp/91649/v3.3.11/M";
->>>>>>> e59ec4b5dfce33125190bc8b8974841f51720838
+        this.restUrl = "portalstage.catchpoint.com/jp/91649/v4.0.0/M";
         this.startTime = (new Date()).getTime();
         this.eventsTimingHandler = new EventsTimingHandler();
         this.inputDelay = new InputDelayHandler();
-        this.version = "v3.3.11";
+        this.version = "v4.0.0";
         this.info = {};
         this.hasInsight = false;
         this.data = {
@@ -750,9 +746,11 @@ var RProfiler = (function () {
             _this.cls = CLS;
         };
         this.setLCP = function (_a) {
-            var metricName = _a.name, metricValue = _a.delta;
+            var metricName = _a.name, metricValue = _a.value, metricDelta = _a.delta;
             var LCP = metricName === 'LCP' ? metricValue : undefined;
-            _this.lcp = LCP;
+            if (metricDelta >= 0 && metricValue > 0) {
+                _this.lcp = LCP;
+            }
         };
         this.setINP = function (_a) {
             var metricName = _a.name, metricValue = _a.value;
@@ -1187,13 +1185,4 @@ else {
     };
 }
 profiler.dispatchCustomEvent("GlimpseLoaded");
-<<<<<<< HEAD
-<script language="javascript" type="text/javascript">
-    function init() { window.RProfiler.addInfo('variation', 'token1'); }
-    window.RProfiler ? init() : window.addEventListener("GlimpseLoaded", init);
-</script>
-
-
-=======
->>>>>>> e59ec4b5dfce33125190bc8b8974841f51720838
 
