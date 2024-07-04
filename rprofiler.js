@@ -80,6 +80,7 @@ var Metrics;
     Metrics[Metrics["Redirect"] = 5] = "Redirect";
     Metrics[Metrics["Duration"] = 6] = "Duration";
     Metrics[Metrics["SSL"] = 7] = "SSL";
+    Metrics[Metrics["TransferSize"] = 8] = "TransferSize";
 })(Metrics || (Metrics = {}));
 var CookieIdentifier;
 (function (CookieIdentifier) {
@@ -842,6 +843,8 @@ var Util = /** @class */ (function () {
                     return allowOrigin ? resource.connectEnd - resource['secureConnectionStart'] : null;
                 }
                 break;
+            case Metrics.TransferSize:
+                return resource.transferSize;
         }
         return 0;
     };
@@ -916,6 +919,7 @@ var WaterfallItem = /** @class */ (function () {
         this.duration = func(resource, Metrics.Duration);
         this.redirect = func(resource, Metrics.Redirect);
         this.ssl = func(resource, Metrics.SSL);
+        this.transferSize = func(resource, Metrics.TransferSize);
     }
     Object.defineProperty(WaterfallItem.prototype, "url", {
         get: function () {
@@ -972,6 +976,7 @@ var WaterfallItem = /** @class */ (function () {
         setIfNumber('rd', roundedValue(this.redirect));
         setIfNumber('dr', roundedValue(this.duration));
         setIfNumber('ssl', roundedValue(this.ssl));
+        setIfNumber('ts', this.transferSize);
         return obj;
     };
     return WaterfallItem;
@@ -1428,6 +1433,9 @@ var PostData = /** @class */ (function (_super) {
                 obj['ftc'] = this.ftc;
                 obj['inpDe'] = this.inpDe;
             }
+        }
+        if (type === PostType.OnBeforeUnload || type === PostType.OnAbort) {
+            obj['rqc'] = this.rqc;
         }
         return obj;
     };
@@ -1979,6 +1987,7 @@ var DataProvider = /** @class */ (function () {
                     _this.setClearResources();
                     if (config.config.clearResources && config.pageWindow.performance.clearResourceTimings) {
                         postObj.resources = arr;
+                        postObj.rqc = arr.length;
                         config.pageWindow.performance.clearResourceTimings();
                     }
                     else {
