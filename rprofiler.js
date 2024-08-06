@@ -1,48 +1,48 @@
-/******/ (() => { // webpackBootstrap
+/******/ (function() { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	// The require scope
 /******/ 	var __webpack_require__ = {};
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 		__webpack_require__.d = function(exports, definition) {
 /******/ 			for(var key in definition) {
 /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
+/******/ 		__webpack_require__.r = function(exports) {
 /******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
 /*!*************************************************!*\
-  !*** ./src/rprofiler/rprofiler.ts + 31 modules ***!
+  !*** ./src/rprofiler/rprofiler.ts + 30 modules ***!
   \*************************************************/
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "default": () => (/* binding */ rprofiler)
+  "default": function() { return /* binding */ rprofiler; }
 });
 
 ;// CONCATENATED MODULE: ./node_modules/web-vitals/dist/web-vitals.attribution.js
@@ -57,6 +57,14 @@ var WindowEvent;
     WindowEvent["Error"] = "error";
     WindowEvent["Unload"] = "unload";
 })(WindowEvent || (WindowEvent = {}));
+var LoadStateEnum;
+(function (LoadStateEnum) {
+    LoadStateEnum[LoadStateEnum["None"] = 0] = "None";
+    LoadStateEnum[LoadStateEnum["Loading"] = 1] = "Loading";
+    LoadStateEnum[LoadStateEnum["Complete"] = 2] = "Complete";
+    LoadStateEnum[LoadStateEnum["DomInteractive"] = 3] = "DomInteractive";
+    LoadStateEnum[LoadStateEnum["DomContentLoaded"] = 4] = "DomContentLoaded";
+})(LoadStateEnum || (LoadStateEnum = {}));
 var VisibilityType;
 (function (VisibilityType) {
     VisibilityType[VisibilityType["Focus"] = 0] = "Focus";
@@ -128,7 +136,7 @@ var AjaxTiming = /** @class */ (function () {
     }
     return AjaxTiming;
 }());
-/* harmony default export */ const rprofiler_AjaxTiming = (AjaxTiming);
+/* harmony default export */ var rprofiler_AjaxTiming = (AjaxTiming);
 
 ;// CONCATENATED MODULE: ./src/rprofiler/AjaxRequestsHandler.ts
 
@@ -362,7 +370,7 @@ var AjaxRequestsHandler = /** @class */ (function () {
     };
     return AjaxRequestsHandler;
 }());
-/* harmony default export */ const rprofiler_AjaxRequestsHandler = (AjaxRequestsHandler);
+/* harmony default export */ var rprofiler_AjaxRequestsHandler = (AjaxRequestsHandler);
 
 ;// CONCATENATED MODULE: ./src/rprofiler/ProfilerEventManager.ts
 var ProfilerEventManager = /** @class */ (function () {
@@ -403,7 +411,7 @@ var ProfilerEventManager = /** @class */ (function () {
     };
     return ProfilerEventManager;
 }());
-/* harmony default export */ const rprofiler_ProfilerEventManager = (ProfilerEventManager);
+/* harmony default export */ var rprofiler_ProfilerEventManager = (ProfilerEventManager);
 
 ;// CONCATENATED MODULE: ./src/rprofiler/EventsTimingHandler.ts
 
@@ -579,96 +587,7 @@ var EventsTimingHandler = /** @class */ (function () {
     }
     return EventsTimingHandler;
 }());
-/* harmony default export */ const rprofiler_EventsTimingHandler = (EventsTimingHandler);
-
-;// CONCATENATED MODULE: ./src/rprofiler/InputDelayHandler.ts
-
-var InputDelayHandler = /** @class */ (function () {
-    function InputDelayHandler() {
-        var _this = this;
-        this.firstInputDelay = 0;
-        this.firstInputTimeStamp = 0;
-        this.startTime = 0;
-        this.delay = 0;
-        this.profileManager = new rprofiler_ProfilerEventManager();
-        this.eventTypes = ['click', 'mousedown', 'keydown', 'touchstart', 'pointerdown'];
-        this.addEventListeners = function () {
-            _this.eventTypes.forEach(function (event) {
-                _this.profileManager.add(event, document, _this.onInput);
-            });
-        };
-        this.now = function () {
-            return new Date().getTime();
-        };
-        this.removeEventListeners = function () {
-            _this.eventTypes.forEach(function (event) {
-                _this.profileManager.remove(event, document, _this.onInput);
-            });
-        };
-        this.onInput = function (evt) {
-            // Only count cancelable events, which should trigger behavior
-            if (!evt.cancelable) {
-                return;
-            }
-            // In some browsers `event.timeStamp` returns a `DOMTimeStamp` value
-            // (epoch time) istead of the newer `DOMHighResTimeStamp`
-            // (document-origin time). To check for that we assume any timestamp
-            // greater than 1 trillion is a `DOMTimeStamp`, and compare it using
-            var isEpochTime = evt.timeStamp > 1e12;
-            _this.firstInputTimeStamp = _this.now();
-            var useFirstInputTime = isEpochTime || !window['performance'];
-            var now = useFirstInputTime ? _this.firstInputTimeStamp : window['performance'].now();
-            _this.delay = now - evt.timeStamp;
-            if (evt.type == 'pointerdown') {
-                _this.onPointerDown();
-            }
-            else {
-                _this.removeEventListeners();
-                _this.updateFirstInputDelay();
-            }
-        };
-        this.onPointerUp = function () {
-            _this.removeEventListeners();
-            _this.updateFirstInputDelay();
-        };
-        this.onPointerCancel = function () {
-            _this.removePointerEventListeners();
-        };
-        this.removePointerEventListeners = function () {
-            _this.profileManager.remove('pointerup', document, _this.onPointerUp);
-            _this.profileManager.remove('pointercancel', document, _this.onPointerCancel);
-        };
-        this.updateFirstInputDelay = function () {
-            if (_this.delay >= 0 && _this.delay < _this.firstInputTimeStamp - _this.startTime) {
-                _this.firstInputDelay = Math.round(_this.delay);
-            }
-        };
-        this.startSoftNavigationCapture = function () {
-            _this.resetSoftNavigationCapture();
-        };
-        this.resetSoftNavigationCapture = function () {
-            _this.resetFirstInputDelay();
-            _this.addEventListeners();
-        };
-        this.resetFirstInputDelay = function () {
-            _this.delay = 0;
-            _this.firstInputDelay = 0;
-            _this.startTime = 0;
-            _this.firstInputTimeStamp = 0;
-        };
-        this.startTime = this.now();
-        this.addEventListeners();
-    }
-    InputDelayHandler.prototype.onPointerDown = function () {
-        this.profileManager.add('pointerup', document, this.onPointerUp);
-        this.profileManager.add('pointercancel', document, this.onPointerCancel);
-    };
-    InputDelayHandler.prototype.getFirstInputDelay = function () {
-        return this.firstInputDelay;
-    };
-    return InputDelayHandler;
-}());
-/* harmony default export */ const rprofiler_InputDelayHandler = (InputDelayHandler);
+/* harmony default export */ var rprofiler_EventsTimingHandler = (EventsTimingHandler);
 
 ;// CONCATENATED MODULE: ./src/rprofiler/ProfilerJsError.ts
 var ProfilerJsError = /** @class */ (function () {
@@ -686,7 +605,7 @@ var ProfilerJsError = /** @class */ (function () {
     };
     return ProfilerJsError;
 }());
-/* harmony default export */ const rprofiler_ProfilerJsError = (ProfilerJsError);
+/* harmony default export */ var rprofiler_ProfilerJsError = (ProfilerJsError);
 
 ;// CONCATENATED MODULE: ./src/main/config.ts
 var __assign = (undefined && undefined.__assign) || function () {
@@ -748,23 +667,23 @@ var MainConfig = /** @class */ (function () {
     MainConfig.hasPerformanceApi = !!_f.pageWindow.performance && typeof _f.pageWindow.performance === 'object';
     MainConfig.hasGetEntriesApi = _f.hasPerformanceApi && typeof _f.pageWindow.performance.getEntriesByType === 'function';
     MainConfig.testUserId = "test";
-    MainConfig.version = 'v4.0.1';
+    MainConfig.version = 'v4.0.3';
     MainConfig.config = {
         sampleRate: -999, // range [0 - 100]
         waterfallSampleRate: -888, // range [0 - 100]
         postUrl: _f.protocol + 'lst01a.3genlabs.net/hawklogserver/r.p',
         siteId: 91649,
         debugParameter: 'GlimpseDebug',
-        debugUrl: 'portalstage.catchpoint.com/jp/v4.0.1/D',
+        debugUrl: 'portalstage.catchpoint.com/jp/v4.0.3/D',
         waterfallParameter: 'GlimpseWaterfall',
         sendOnLoad: false, // default is send onunload
         clearResources: true, // clear performance entries when we send data to core. using performance.clearResourceTimings()
-        ajaxDomains: '{{ajaxDomains}}'
+        ajaxDomains: ''
     };
     return MainConfig;
 }());
 
-/* harmony default export */ const config = (MainConfig);
+/* harmony default export */ var config = (MainConfig);
 
 ;// CONCATENATED MODULE: ./src/main/DataWrapper.ts
 var DataWrapper = /** @class */ (function () {
@@ -813,7 +732,7 @@ var DataWrapper = /** @class */ (function () {
     };
     return DataWrapper;
 }());
-/* harmony default export */ const main_DataWrapper = (DataWrapper);
+/* harmony default export */ var main_DataWrapper = (DataWrapper);
 
 ;// CONCATENATED MODULE: ./src/main/Util.ts
 
@@ -880,6 +799,20 @@ var Util = /** @class */ (function () {
         config.profiler.eventManager.clear();
         config.profiler.getEventTimingHandler().clear();
     };
+    Util.getLoadStateEnum = function (state) {
+        switch (state) {
+            case 'loading':
+                return LoadStateEnum.Loading;
+            case "dom-content-loaded":
+                return LoadStateEnum.DomContentLoaded;
+            case 'dom-interactive':
+                return LoadStateEnum.DomInteractive;
+            case 'complete':
+                return LoadStateEnum.Complete;
+            default:
+                return LoadStateEnum.None;
+        }
+    };
     Util.getNavigationTime = function () {
         var timing = null;
         var navigationTime = config.hasGetEntriesApi && config.pageWindow.performance.getEntriesByType('navigation');
@@ -894,7 +827,7 @@ var Util = /** @class */ (function () {
     };
     return Util;
 }());
-/* harmony default export */ const main_Util = (Util);
+/* harmony default export */ var main_Util = (Util);
 
 ;// CONCATENATED MODULE: ./src/main/WaterfallItem.ts
 
@@ -981,7 +914,7 @@ var WaterfallItem = /** @class */ (function () {
     };
     return WaterfallItem;
 }());
-/* harmony default export */ const main_WaterfallItem = (WaterfallItem);
+/* harmony default export */ var main_WaterfallItem = (WaterfallItem);
 
 ;// CONCATENATED MODULE: ./src/main/AjaxItem.ts
 var __extends = (undefined && undefined.__extends) || (function () {
@@ -1056,7 +989,7 @@ var AjaxItem = /** @class */ (function (_super) {
     };
     return AjaxItem;
 }(main_WaterfallItem));
-/* harmony default export */ const main_AjaxItem = (AjaxItem);
+/* harmony default export */ var main_AjaxItem = (AjaxItem);
 
 ;// CONCATENATED MODULE: ./src/main/HostSummary.ts
 
@@ -1129,7 +1062,7 @@ var HostSummary = /** @class */ (function () {
     };
     return HostSummary;
 }());
-/* harmony default export */ const main_HostSummary = (HostSummary);
+/* harmony default export */ var main_HostSummary = (HostSummary);
 
 ;// CONCATENATED MODULE: ./src/main/HostWaterfall.ts
 
@@ -1156,7 +1089,7 @@ var HostWaterfall = /** @class */ (function () {
     };
     return HostWaterfall;
 }());
-/* harmony default export */ const main_HostWaterfall = (HostWaterfall);
+/* harmony default export */ var main_HostWaterfall = (HostWaterfall);
 
 ;// CONCATENATED MODULE: ./src/main/TreeNode.ts
 var TreeNode = /** @class */ (function () {
@@ -1166,7 +1099,7 @@ var TreeNode = /** @class */ (function () {
     }
     return TreeNode;
 }());
-/* harmony default export */ const main_TreeNode = (TreeNode);
+/* harmony default export */ var main_TreeNode = (TreeNode);
 
 ;// CONCATENATED MODULE: ./src/main/Tree.ts
 
@@ -1220,7 +1153,7 @@ var Tree = /** @class */ (function () {
     };
     return Tree;
 }());
-/* harmony default export */ const main_Tree = (Tree);
+/* harmony default export */ var main_Tree = (Tree);
 
 ;// CONCATENATED MODULE: ./src/main/PostData.ts
 var PostData_extends = (undefined && undefined.__extends) || (function () {
@@ -1418,9 +1351,7 @@ var PostData = /** @class */ (function (_super) {
             obj['tti'] = this.timeToInteract;
             obj['et'] = this.engagementTime;
             obj['fet'] = this.firstEngagementTime;
-            obj['fid'] = this.firstInputDelay;
             obj['vct'] = this.visComplete;
-            obj['fid'] = this.firstInputDelay;
             if (!isSoftNavigation) {
                 obj['fp'] = this.firstPaint;
                 obj['fcp'] = this.firstContentPaint;
@@ -1602,7 +1533,7 @@ var PostData = /** @class */ (function (_super) {
     };
     return PostData;
 }(main_DataWrapper));
-/* harmony default export */ const main_PostData = (PostData);
+/* harmony default export */ var main_PostData = (PostData);
 
 ;// CONCATENATED MODULE: ./src/main/Storage.ts
 
@@ -1674,7 +1605,7 @@ var Storage = /** @class */ (function () {
     Storage.storeRegex = new RegExp('^(\\s)*' + Storage.storeKey + '=', 'i');
     return Storage;
 }());
-/* harmony default export */ const main_Storage = (Storage);
+/* harmony default export */ var main_Storage = (Storage);
 
 ;// CONCATENATED MODULE: ./src/main/VisitorStorage.ts
 
@@ -1754,7 +1685,7 @@ var VisitorStorage = /** @class */ (function () {
     };
     return VisitorStorage;
 }());
-/* harmony default export */ const main_VisitorStorage = (VisitorStorage);
+/* harmony default export */ var main_VisitorStorage = (VisitorStorage);
 
 ;// CONCATENATED MODULE: ./src/main/Visitor.ts
 
@@ -1862,7 +1793,7 @@ var Visitor = /** @class */ (function () {
     };
     return Visitor;
 }());
-/* harmony default export */ const main_Visitor = (Visitor);
+/* harmony default export */ var main_Visitor = (Visitor);
 
 ;// CONCATENATED MODULE: ./src/main/PerformanceObserver.ts
 
@@ -1930,7 +1861,7 @@ var PerformanceObserver_PerformanceObserver = /** @class */ (function () {
     };
     return PerformanceObserver;
 }());
-/* harmony default export */ const main_PerformanceObserver = (PerformanceObserver_PerformanceObserver);
+/* harmony default export */ var main_PerformanceObserver = (PerformanceObserver_PerformanceObserver);
 
 ;// CONCATENATED MODULE: ./src/main/DataProvider.ts
 
@@ -2037,9 +1968,6 @@ var DataProvider = /** @class */ (function () {
                 postObj.engagementTime = config.profiler.getEventTimingHandler().getEngagementTime();
                 postObj.timeOnPage = _this.getTimeOnPage(isSoftNavigation);
                 postObj.firstEngagementTime = _this.getFirstEngagementTime(isSoftNavigation);
-            }
-            if (config.profiler.getInputDelay) {
-                postObj.firstInputDelay = config.profiler.getInputDelay().getFirstInputDelay();
             }
         };
         this.getFirstEngagementTime = function (isSoftNavigation) {
@@ -2168,9 +2096,7 @@ var DataProvider = /** @class */ (function () {
                 _this.softNavigationStart = config.now();
                 if (config.profiler.getEventTimingHandler) {
                     var handler = config.profiler.getEventTimingHandler();
-                    var inputHandler = config.profiler.getInputDelay();
                     handler.startSoftNavigationCapture();
-                    inputHandler.startSoftNavigationCapture();
                     handler.resetSoftNavigationCapture();
                 }
             }, 0);
@@ -2548,7 +2474,7 @@ var DataProvider = /** @class */ (function () {
     };
     return DataProvider;
 }());
-/* harmony default export */ const main_DataProvider = (DataProvider);
+/* harmony default export */ var main_DataProvider = (DataProvider);
 
 ;// CONCATENATED MODULE: ./src/main/main.ts
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
@@ -2610,7 +2536,7 @@ var mainScript = function () { return __awaiter(void 0, void 0, void 0, function
                     var response, data;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
-                            case 0: return [4 /*yield*/, fetch('https://portalstage.catchpoint.com/jp/91649/v4.0.1/AC')];
+                            case 0: return [4 /*yield*/, fetch('https://portalstage.catchpoint.com/jp/91649/v4.0.3/AC')];
                             case 1:
                                 response = _a.sent();
                                 return [4 /*yield*/, response.json()];
@@ -2642,7 +2568,7 @@ var mainScript = function () { return __awaiter(void 0, void 0, void 0, function
         }
     });
 }); };
-/* harmony default export */ const main = (mainScript);
+/* harmony default export */ var main = (mainScript);
 
 ;// CONCATENATED MODULE: ./src/utils.ts
 var extractImageUrl = function (backgroundImage) {
@@ -3048,7 +2974,7 @@ var visComplete = function () {
         };
     })();
 };
-/* harmony default export */ const src_visComplete = (visComplete);
+/* harmony default export */ var src_visComplete = (visComplete);
 
 ;// CONCATENATED MODULE: ./src/frustrationMetrics/RageClick.ts
 /**
@@ -3280,18 +3206,16 @@ var rprofiler_assign = (undefined && undefined.__assign) || function () {
 
 
 
-
 var RProfiler = /** @class */ (function () {
     function RProfiler() {
         var _this = this;
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        this.restUrl = 'portalstage.catchpoint.com/jp/91649/v4.0.1/M';
+        this.restUrl = 'portalstage.catchpoint.com/jp/91649/v4.0.3/M';
         this.startTime = new Date().getTime();
         this.eventsTimingHandler = new rprofiler_EventsTimingHandler();
-        this.inputDelay = new rprofiler_InputDelayHandler();
         this.inpDe = [];
-        this.version = 'v4.0.1'; //version number of inline script
+        this.version = 'v4.0.3'; //version number of inline script
         this.info = {};
         this.hasInsight = false;
         this.data = {
@@ -3331,7 +3255,7 @@ var RProfiler = /** @class */ (function () {
                         psdu: main_Util.getRoundedValue(attribution.processingDuration),
                         prdl: main_Util.getRoundedValue(attribution.presentationDelay),
                         val: main_Util.getRoundedValue(metricValue),
-                        ls: attribution.loadState
+                        ls: main_Util.getLoadStateEnum(attribution.loadState)
                     };
                     _this.inpDe.push(rprofiler_assign({}, eventParams));
                     _this.inpDe.sort(function (a, b) { return b.val - a.val; });
@@ -3399,9 +3323,6 @@ var RProfiler = /** @class */ (function () {
         };
         this.getEventTimingHandler = function () {
             return _this.eventsTimingHandler;
-        };
-        this.getInputDelay = function () {
-            return _this.inputDelay;
         };
         this.getCPWebVitals = function () {
             D(_this.setCLS);
@@ -3502,7 +3423,7 @@ var RProfiler = /** @class */ (function () {
     };
     return RProfiler;
 }());
-/* harmony default export */ const rprofiler = (RProfiler);
+/* harmony default export */ var rprofiler = (RProfiler);
 var profiler = new RProfiler();
 window['RProfiler'] = profiler;
 window['WindowEvent'] = WindowEvent;
