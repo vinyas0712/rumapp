@@ -1,3 +1,4 @@
+
 /******/ (function() { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	// The require scope
@@ -670,20 +671,20 @@ var MainConfig = /** @class */ (function () {
     MainConfig.hasPerformanceApi = !!_f.pageWindow.performance && typeof _f.pageWindow.performance === 'object';
     MainConfig.hasGetEntriesApi = _f.hasPerformanceApi && typeof _f.pageWindow.performance.getEntriesByType === 'function';
     MainConfig.testUserId = "test";
-    MainConfig.version = 'v4.0.7';
+    MainConfig.version = 'v4.0.8';
     MainConfig.config = {
         sampleRate: -999, // range [0 - 100]
         waterfallSampleRate: -888, // range [0 - 100]
         postUrl: _f.protocol + 'lst01a.3genlabs.net/hawklogserver/r.p',
         siteId: 1826,
         debugParameter: 'GlimpseDebug',
-        debugUrl: 'localhost:44394/jp/v4.0.7/s.D',
+        debugUrl: 'portalstage.catchpoint.com/jp/v4.0.8/D',
         waterfallParameter: 'GlimpseWaterfall',
         sendOnLoad: false, // default is send onunload
         clearResources: true, // clear performance entries when we send data to core. using performance.clearResourceTimings()
         ajaxDomains: '',
         useBenchmark: false,
-        lastMileUrl: _f.protocol + 'localhost:44394/jp/1826/v4.0.7/LastMileScript.js',
+        lastMileUrl: _f.protocol + 'portalstage.catchpoint.com/jp/1826/v4.0.8/LastMileScript.js',
         benchMarkPageGroups: ''
     };
     return MainConfig;
@@ -2234,10 +2235,6 @@ var DataProvider = /** @class */ (function () {
             if (cpWebVitals.fcp) {
                 postObj.firstContentPaint = cpWebVitals.fcp;
             }
-            // // Setting fcp to undefined, if lcp is undefined.
-            // if (postObj.lcp === undefined) {
-            //     postObj.firstContentPaint = undefined;
-            // }
             // Checking fp is greater than fcp. If fp is greater than fcp, then assigning the fcp to fp.
             if (postObj.firstPaint > postObj.firstContentPaint || postObj.firstContentPaint === undefined) {
                 postObj.firstPaint = postObj.firstContentPaint;
@@ -2463,7 +2460,12 @@ var DataProvider = /** @class */ (function () {
     DataProvider.prototype.makeRequest = function (type, postObj, sendWaterfall) {
         var dataStr = postObj.toString(type, sendWaterfall);
         if (config.pageWindow.navigator && typeof config.pageWindow.navigator['sendBeacon'] == 'function') {
-            config.pageWindow.navigator['sendBeacon'](this.postUrl, dataStr);
+            try {
+                config.pageWindow.navigator['sendBeacon'](this.postUrl, dataStr);
+            }
+            catch (error) {
+                console.error('Error sending RUM data:', error);
+            }
         }
         else {
             var request_1 = new XMLHttpRequest();
@@ -2485,22 +2487,22 @@ var DataProvider = /** @class */ (function () {
                 request_1.onprogress = function () {
                     // do nothing
                 };
-                request_1.onreadystatechange = function () {
-                    if (request_1.readyState === 4) {
-                        if (request_1.status >= 200 && request_1.status < 300) {
-                            console.log('JSP Request succeeded with status:', request_1.status);
-                        }
-                        else {
-                            console.error('JSP Request failed with status:', request_1.status);
-                            console.error('JSP Response text:', request_1.responseText);
-                        }
-                    }
-                };
             }
             request_1.open('POST', this.postUrl, false);
             request_1.setRequestHeader
                 ? request_1.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
                 : null;
+            request_1.onreadystatechange = function () {
+                if (request_1.readyState === 4) {
+                    if (request_1.status >= 200 && request_1.status < 300) {
+                        console.log('JSP Request succeeded with status:', request_1.status);
+                    }
+                    else {
+                        console.error('JSP Request failed with status:', request_1.status);
+                        console.error('JSP Response text:', request_1.responseText);
+                    }
+                }
+            };
             try {
                 request_1.send(dataStr);
             }
@@ -2574,7 +2576,7 @@ var mainScript = function () { return __awaiter(void 0, void 0, void 0, function
                     var response, data;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
-                            case 0: return [4 /*yield*/, fetch('https://localhost:44394/jp/1826/v4.0.7/s.AC')];
+                            case 0: return [4 /*yield*/, fetch('https://portalstage.catchpoint.com/jp/1826/v4.0.8/AC')];
                             case 1:
                                 response = _a.sent();
                                 return [4 /*yield*/, response.json()];
@@ -3287,12 +3289,12 @@ var RProfiler = /** @class */ (function () {
         var _this = this;
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        this.restUrl = 'localhost:44394/jp/1826/v4.0.7/s.M';
+        this.restUrl = 'portalstage.catchpoint.com/jp/1826/v4.0.8/M';
         this.startTime = new Date().getTime();
         this.eventsTimingHandler = new rprofiler_EventsTimingHandler();
         this.inpDe = [];
         this.siteId = 1826;
-        this.version = 'v4.0.7'; //version number of inline script
+        this.version = 'v4.0.8'; //version number of inline script
         this.info = {};
         this.hasInsight = false;
         this.data = {
